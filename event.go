@@ -115,6 +115,14 @@ func (e *event) EventAction() {
 			e.newValue <- fmt.Sprintf("%f", itv)
 			e.err <- nil
 		}
+	case e.in.Parse("macTableAgingInterval %f", &itv):
+		if itv < 1 {
+			e.err <- fmt.Errorf("macTableAgingInterval must be 1 second or longer")
+		} else {
+			e.mk1.macTablePoller.pollInterval = itv
+			e.newValue <- fmt.Sprintf("%f", itv)
+			e.err <- nil
+		}
 	default:
 		e.err <- fmt.Errorf("can't set %s to %v", e.key, e.value)
 	}
