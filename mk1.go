@@ -41,7 +41,6 @@ type Mk1 struct {
 	poller          ifStatsPoller
 	fastPoller      fastIfStatsPoller
 	unresolvedArper unresolvedArper
-	macTablePoller  macTablePoller
 	pub             *publisher.Publisher
 	// producer	*kafka.Producer
 
@@ -236,17 +235,14 @@ func (mk1 *Mk1) init() {
 	mk1.poller.mk1 = mk1
 	mk1.fastPoller.mk1 = mk1
 	mk1.unresolvedArper.mk1 = mk1
-	mk1.macTablePoller.mk1 = mk1
 
 	mk1.poller.addEvent(0)
 	mk1.fastPoller.addEvent(0)
 	mk1.unresolvedArper.addEvent(0)
-	mk1.macTablePoller.addEvent(0)
 
 	mk1.poller.pollInterval = defaultPollInterval
 	mk1.fastPoller.pollInterval = defaultFastPollIntervalMilliSec
 	mk1.unresolvedArper.pollInterval = defaultUnresolvedArpInterval
-	mk1.macTablePoller.pollInterval = defaultMacTableAgingInterval
 
 	mk1.fastPoller.hostname, _ = os.Hostname()
 	mk1.pubHwIfConfig()
@@ -258,7 +254,6 @@ func (mk1 *Mk1) init() {
 		defaultFastPollIntervalMilliSec)
 	mk1.poller.pubch <- fmt.Sprint("kafka-broker: ", "")
 	mk1.poller.pubch <- fmt.Sprint("unresolved-arpInterval: ", defaultUnresolvedArpInterval)
-	mk1.poller.pubch <- fmt.Sprint("macTableAgingInterval: ", defaultMacTableAgingInterval)
 }
 
 func (mk1 *Mk1) newEvent() interface{} {
